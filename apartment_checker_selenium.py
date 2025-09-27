@@ -21,8 +21,18 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 class ApartmentChecker:
     def __init__(self):
-        # Try the direct apartment availability API endpoint first
+        # Try URLs that directly show 2-bedroom apartments
         self.url = "https://www.irvinecompanyapartments.com/locations/northern-california/santa-clara/monticello/availability.html"
+        # URL with 2-bedroom filter parameter
+        self.filtered_url = "https://www.irvinecompanyapartments.com/locations/northern-california/santa-clara/monticello/availability.html?bedrooms=2"
+        # Alternative URLs to try if main one is blocked
+        self.alternative_urls = [
+            "https://www.irvinecompanyapartments.com/locations/northern-california/santa-clara/monticello/",
+            "https://www.irvinecompanyapartments.com/api/communities/monticello/availability?bedrooms=2",
+            "https://www.irvinecompanyapartments.com/locations/northern-california/santa-clara/monticello.html",
+            # Try the direct leasing page that sometimes bypasses Cloudflare
+            "https://www.irvinecompanyapartments.com/online-leasing.html?siteId=3926145&commName=Monticello%20II%20Apartment%20Homes&bedrooms=2"
+        ]
         self.data_file = "apartment_data.json"
         self.driver = None
         self.setup_driver()
@@ -84,11 +94,14 @@ class ApartmentChecker:
 
             # Try multiple approaches to set up ChromeDriver
             driver_attempts = [
-                # First try using webdriver-manager to get exact matching version
+                # First try direct path to working driver
+                lambda: webdriver.Chrome(service=Service("/Users/kalipour/.cache/selenium/chromedriver/mac-arm64/140.0.7339.207/chromedriver"), options=options),
+                # Then try basic approach - use PATH driver
+                lambda: webdriver.Chrome(options=options),
+                # System chromedriver as fallback
+                lambda: webdriver.Chrome(service=Service("/usr/local/bin/chromedriver"), options=options),
+                # Last resort: webdriver-manager (may fail if offline)
                 lambda: webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options),
-                lambda: webdriver.Chrome(service=Service("/usr/local/bin/chromedriver"), options=options),  # System chromedriver
-                lambda: webdriver.Chrome(options=options),  # Basic approach - use PATH driver
-                lambda: webdriver.Chrome(service=Service("/Users/kalipour/.cache/selenium/chromedriver/mac-arm64/140.0.7339.207/chromedriver"), options=options),  # Direct path to working driver
             ]
 
             last_error = None
@@ -213,6 +226,19 @@ class ApartmentChecker:
 
             # Create a session with enhanced headers to bypass Cloudflare
             session = requests.Session()
+
+            # Add retry mechanism
+            from requests.adapters import HTTPAdapter
+            from requests.packages.urllib3.util.retry import Retry
+
+            retry_strategy = Retry(
+                total=3,
+                backoff_factor=1,
+                status_forcelist=[429, 500, 502, 503, 504],
+            )
+            adapter = HTTPAdapter(max_retries=retry_strategy)
+            session.mount("http://", adapter)
+            session.mount("https://", adapter)
 
             # Realistic headers to mimic a real browser
             headers = {
@@ -633,7 +659,21 @@ class ApartmentChecker:
         apartments = self.parse_structured_apartments(html_content)
         if apartments:
             print(f"✅ Found {len(apartments)} apartments using structured parsing")
-            return apartments
+
+            # Filter for only 2-bedroom apartments
+            two_bedroom_apartments = []
+            for apt in apartments:
+                if apt.get('bedrooms') == 2:
+                    two_bedroom_apartments.append(apt)
+
+            print(f"🏠 2-bedroom apartments found: {len(two_bedroom_apartments)}")
+
+            # If we have 2-bedroom apartments, return only those; otherwise return all
+            if two_bedroom_apartments:
+                return two_bedroom_apartments[:20]
+            else:
+                print("⚠️ No 2-bedroom apartments found, returning all apartments for debugging")
+                return apartments[:20]
 
         # Strategy 2: Look for table-based layouts
         apartments = self.parse_table_apartments(html_content)
@@ -1470,10 +1510,23 @@ class ApartmentChecker:
             return self.get_apartment_data_requests()
 
         try:
-            print(f"Fetching data from: {self.url}")
+            # First try the filtered URL that should show 2-bedroom apartments directly
+            print(f"Trying filtered URL for 2-bedroom apartments: {self.filtered_url}")
+            self.driver.get(self.filtered_url)
 
-            # Navigate to the page
-            self.driver.get(self.url)
+            # Wait a bit to see if the filtered URL works
+            time.sleep(5)
+
+            # Check if we got apartment data
+            page_content = self.driver.page_source
+            if ("$" in page_content and
+                ("bed" in page_content.lower() or "bath" in page_content.lower()) and
+                "Just a moment..." not in page_content):
+                print("✅ Filtered URL appears to be working")
+            else:
+                print("⚠️ Filtered URL not working, trying main URL with manual filter...")
+                # Fallback to main URL and apply filter manually
+                self.driver.get(self.url)
 
             # Add random delay to appear more human-like
             import random
@@ -1491,47 +1544,58 @@ class ApartmentChecker:
             self.driver.execute_script("window.scrollTo(0, 0);")
             time.sleep(random.uniform(1.5, 2.5))
 
-            # Wait for specific content to load using WebDriverWait
-            try:
-                wait = WebDriverWait(self.driver, 30)
-                # Wait for apartment data to appear
-                wait.until(
-                    lambda driver:
-                    "$" in driver.page_source and (
-                        "bed" in driver.page_source.lower() or
-                        "bath" in driver.page_source.lower() or
-                        "available" in driver.page_source.lower() or
-                        "sq ft" in driver.page_source.lower()
-                    )
-                )
-                print("✅ Apartment data found in page content")
-            except TimeoutException:
-                print("⚠️ Timeout waiting for apartment data - checking what we have...")
+            # Check for Cloudflare challenge first
+            page_content = self.driver.page_source
+            if ("Just a moment..." in page_content or
+                "cf-browser-verification" in page_content or
+                "Verify you are human" in page_content or
+                "cloudflare" in page_content.lower()):
+                print("🔄 Cloudflare challenge detected - attempting to wait for completion...")
 
-                # Check if we have any useful content at all
-                content = self.driver.page_source
+                # Wait longer for Cloudflare challenge to complete automatically
+                max_wait_time = 120  # 2 minutes total wait
+                wait_interval = 5    # Check every 5 seconds
+                waited = 0
 
-                # Check for Cloudflare challenge
-                if "Just a moment..." in content or "cf-browser-verification" in content:
-                    print("🔄 Cloudflare challenge detected with Selenium, switching to requests...")
-                    return self.get_apartment_data_requests()
+                while waited < max_wait_time:
+                    print(f"   Waiting for Cloudflare challenge... ({waited}s/{max_wait_time}s)")
+                    time.sleep(wait_interval)
+                    waited += wait_interval
 
-                dollar_count = content.count('$')
-                if dollar_count == 0:
-                    print("❌ No pricing data found - switching to requests fallback")
-                    return self.get_apartment_data_requests()
+                    # Check if challenge is completed
+                    current_content = self.driver.page_source
+                    if ("Just a moment..." not in current_content and
+                        "cf-browser-verification" not in current_content and
+                        "Verify you are human" not in current_content):
+                        print("✅ Cloudflare challenge appears to be completed!")
+                        break
 
-            # Continue with the rest of the Selenium processing...
-            # [The rest remains the same, but I'll add a fallback at the end]
+                    # Try some interactions that might help complete the challenge
+                    if waited % 20 == 0:  # Every 20 seconds
+                        try:
+                            # Look for and click any challenge elements
+                            challenge_elements = self.driver.find_elements(By.CSS_SELECTOR,
+                                "[id*='challenge'], [class*='challenge'], [id*='cf-'], input[type='checkbox']")
+                            for elem in challenge_elements[:3]:
+                                if elem.is_displayed() and elem.is_enabled():
+                                    print(f"   Attempting to interact with challenge element...")
+                                    self.driver.execute_script("arguments[0].click();", elem)
+                                    time.sleep(2)
+                        except:
+                            pass
 
-            # Try to find apartment data in page source after all expansions
-            print("🔍 Analyzing page content for apartment data...")
+                        # Random scrolling to appear more human
+                        self.driver.execute_script("window.scrollTo(0, Math.random() * 500);")
+                        time.sleep(1)
+                else:
+                    print("⚠️ Cloudflare challenge did not complete automatically within timeout")
+                    # Continue anyway - maybe we can extract some data
 
-            # Wait longer for Vue components to fully load and trigger AJAX calls
-            print("⏳ Waiting for Vue components to load apartment data...")
-            time.sleep(10)  # Reduced from 25 to 10 seconds
+            # Wait for apartment content to load
+            print("⏳ Waiting for apartment content to load...")
+            time.sleep(10)
 
-            # Scroll through the page to trigger lazy loading
+            # Try scrolling to trigger any lazy loading
             print("📜 Scrolling to trigger lazy loading of apartment data...")
             for scroll_attempt in range(5):
                 self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -1539,326 +1603,85 @@ class ApartmentChecker:
                 self.driver.execute_script("window.scrollTo(0, 0);")
                 time.sleep(2)
 
-                # Check if apartment data has loaded
-                current_content = self.driver.page_source
-                if '$' in current_content and ('bed' in current_content.lower() or 'bath' in current_content.lower()):
-                    print(f"✅ Apartment data detected after scroll attempt {scroll_attempt + 1}")
-                    break
-
-            # Try clicking on filter buttons or tabs that might load apartment data
-            print("🔘 Attempting to interact with filters to load apartment data...")
+            # Apply bedroom filter to get 2-bedroom apartments
+            print("🏠 Applying 2-bedroom filter...")
             try:
-                # Look for common filter buttons and Vue components
-                filter_selectors = [
-                    "//button[contains(@class, 'filter') or contains(text(), 'bed') or contains(text(), 'bath') or contains(text(), 'Apply')]",
-                    "//button[contains(@class, 'btn') and (contains(text(), '2') or contains(text(), 'bed') or contains(text(), 'bath'))]",
-                    "//div[contains(@class, 'vue-component') and contains(@class, 'filter')]//button",
-                    "//*[@vue-component or contains(@class, 'vue-component')]//button",
-                    "//button[contains(@data-filter, 'bed') or contains(@data-filter, 'bath')]"
+                # Look for bedroom filter buttons
+                bedroom_filter_selectors = [
+                    "//button[contains(text(), '2') and (contains(text(), 'bed') or contains(text(), 'Bed'))]",
+                    "//button[@data-bedrooms='2']",
+                    "//button[contains(@class, 'bed') and contains(text(), '2')]",
+                    "//input[@type='checkbox' and @value='2'][@name*='bed']",
+                    "//select[@name*='bed']//option[@value='2']",
+                    "//div[contains(@class, 'filter')]//button[contains(text(), '2')]"
                 ]
 
-                for selector in filter_selectors:
-                    filter_buttons = self.driver.find_elements(By.XPATH, selector)
-                    for button in filter_buttons[:3]:
-                        try:
-                            if button.is_displayed() and button.is_enabled():
-                                print(f"   Clicking filter button: {button.text[:50]}")
-                                self.driver.execute_script("arguments[0].click();", button)
-                                time.sleep(5)  # Wait longer for Vue components to update
-                        except:
-                            continue
-            except:
-                pass
-
-            # Try waiting for specific Vue components to load apartment data
-            print("🎯 Waiting for apartment list Vue components to load...")
-            try:
-                # Wait for Vue components that might contain apartment data
-                wait = WebDriverWait(self.driver, 20)
-                wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[vue-component], .vue-component, [data-component]")))
-                print("✅ Vue components detected - waiting for data to populate...")
-                time.sleep(10)
-            except TimeoutException:
-                print("⚠️ No Vue components detected - proceeding with current content")
-
-            # Wait longer for AJAX apartment data to load
-            print("🌐 Waiting for AJAX apartment data to load...")
-            time.sleep(15)  # Wait longer for AJAX requests to complete
-
-            # Try executing JavaScript to trigger apartment data loading
-            print("🔧 Executing JavaScript to trigger apartment data loading...")
-            try:
-                # Trigger any lazy loading or data fetching
-                self.driver.execute_script("""
-                    // Trigger any apartment data loading
-                    if (window.loadApartments) window.loadApartments();
-                    if (window.fetchApartmentData) window.fetchApartmentData();
-                    if (window.triggerApartmentLoad) window.triggerApartmentLoad();
-
-                    // Try to click any "Show More" or "Load" buttons
-                    var loadButtons = document.querySelectorAll('button, a');
-                    loadButtons.forEach(function(btn) {
-                        var text = btn.textContent.toLowerCase();
-                        if (text.includes('show') || text.includes('load') || text.includes('more') ||
-                            text.includes('view') || text.includes('apartment') || text.includes('unit')) {
-                            try { btn.click(); } catch(e) {}
-                        }
-                    });
-
-                    // Dispatch custom events that might trigger apartment loading
-                    window.dispatchEvent(new Event('load'));
-                    window.dispatchEvent(new Event('DOMContentLoaded'));
-                """)
-                time.sleep(10)  # Wait for triggered actions to complete
-            except Exception as e:
-                print(f"⚠️ JavaScript execution failed: {e}")
-
-            # Try focusing on apartment-related elements to trigger loading
-            try:
-                apartment_containers = self.driver.find_elements(By.CSS_SELECTOR,
-                    "[vue-component], .vue-component, [id*='apartment'], [class*='apartment'], [id*='unit'], [class*='unit'], [class*='floorplan'], [class*='availability']")
-                for container in apartment_containers[:5]:
+                filter_applied = False
+                for selector in bedroom_filter_selectors:
                     try:
-                        self.driver.execute_script("arguments[0].scrollIntoView();", container)
-                        time.sleep(2)
-                    except:
-                        continue
-            except:
-                pass
-
-            # Enhanced JavaScript data extraction
-            apartment_data_js = self.driver.execute_script("""
-                // Look for common apartment data variables and API responses
-                var dataVars = [];
-                var windowKeys = Object.keys(window);
-
-                // Check for Vue/React component data and API responses
-                var possibleDataSources = [
-                    // Check window object for apartment data
-                    ...windowKeys.filter(key =>
-                        key.toLowerCase().includes('apartment') ||
-                        key.toLowerCase().includes('unit') ||
-                        key.toLowerCase().includes('floor') ||
-                        key.toLowerCase().includes('availab') ||
-                        key.toLowerCase().includes('vue') ||
-                        key.toLowerCase().includes('component') ||
-                        key.toLowerCase().includes('data') ||
-                        key.toLowerCase().includes('store') ||
-                        key.toLowerCase().includes('state') ||
-                        key.toLowerCase().includes('app')
-                    ).map(key => ({source: 'window.' + key, obj: window[key]})),
-
-                    // Check for common Vue app instances
-                    {source: 'Vue app data', obj: window.Vue || window.$vm || window.app},
-
-                    // Check for data in DOM elements
-                    ...Array.from(document.querySelectorAll('[data-component], [data-apartment], [data-unit], script[type="application/json"]'))
-                        .map((el, i) => ({source: 'DOM element ' + i, obj: el.textContent || el.dataset}))
-                ];
-
-                for (var source of possibleDataSources) {
-                    try {
-                        var val = source.obj;
-                        if (val && typeof val === 'object') {
-                            var dataStr = JSON.stringify(val);
-                            if (dataStr.includes('$') || dataStr.includes('bed') || dataStr.includes('bath') ||
-                                dataStr.includes('unit') || dataStr.includes('rent') || dataStr.includes('price') ||
-                                dataStr.includes('floor') || dataStr.includes('sqft') || dataStr.includes('square')) {
-                                dataVars.push({key: source.source, data: dataStr.substring(0, 3000)});
-                            } else if (dataStr.length > 500 && (
-                                dataStr.includes('apartment') || dataStr.includes('availability') ||
-                                dataStr.includes('floorplan') || dataStr.includes('leasing'))) {
-                                dataVars.push({key: source.source, data: dataStr.substring(0, 2000)});
-                            }
-                        }
-                    } catch(e) {}
-                }
-
-                // Also check for XHR/Fetch responses that might contain apartment data
-                try {
-                    var fetchResponses = window.__fetchResponses || window._apiData || window.apartmentData;
-                    if (fetchResponses) {
-                        dataVars.push({key: 'API responses', data: JSON.stringify(fetchResponses).substring(0, 3000)});
-                    }
-                } catch(e) {}
-
-                // Check for data in script tags
-                try {
-                    var scriptTags = Array.from(document.querySelectorAll('script'));
-                    for (var i = 0; i < Math.min(scriptTags.length, 20); i++) {
-                        var script = scriptTags[i];
-                        if (script.textContent && (
-                            script.textContent.includes('apartment') ||
-                            script.textContent.includes('floorplan') ||
-                            script.textContent.includes('unit') ||
-                            script.textContent.includes('$')
-                        )) {
-                            var scriptData = script.textContent.substring(0, 2000);
-                            if (scriptData.includes('bed') || scriptData.includes('bath') || scriptData.includes('price')) {
-                                dataVars.push({key: 'Script tag ' + i, data: scriptData});
-                            }
-                        }
-                    }
-                } catch(e) {}
-
-                return dataVars;
-            """)
-
-            print(f"🔍 Found {len(apartment_data_js)} potential JavaScript data sources")
-
-            # Process the JavaScript data for apartment information
-            if apartment_data_js:
-                print(f"🎯 Processing {len(apartment_data_js)} JavaScript data sources")
-
-                # Log some details about what we found
-                for i, var_info in enumerate(apartment_data_js[:3]):
-                    print(f"   Source '{var_info.get('key', 'unknown')}': {var_info.get('data', '')[:100]}...")
-
-                # Try to extract apartment data from JavaScript variables
-                js_apartments = []
-                for var_info in apartment_data_js:
-                    var_data = var_info.get('data', '')
-                    if var_data:
-                        extracted = self.extract_apartments_from_json(var_data)
-                        if extracted:
-                            js_apartments.extend(extracted)
-
-                # Filter for apartments with meaningful data
-                detailed_js_apartments = []
-                if js_apartments:
-                    for apt in js_apartments:
-                        if ('price' in apt or 'bedrooms' in apt or 'bathrooms' in apt or
-                            'square_feet' in apt or 'features' in apt or
-                            (apt.get('status') and apt.get('status') != 'Unknown')):
-                            detailed_js_apartments.append(apt)
-
-                if detailed_js_apartments:
-                    print(f"✅ Found {len(detailed_js_apartments)} apartments with detailed info from JavaScript")
-                    # Get current page content for hash calculation
-                    current_content = self.driver.page_source
-                    return {
-                        "timestamp": datetime.now().isoformat(),
-                        "status_code": 200,
-                        "content_hash": hashlib.md5(current_content.encode()).hexdigest(),
-                        "content_length": len(current_content),
-                        "apartments": detailed_js_apartments,
-                        "total_apartments": len(detailed_js_apartments),
-                        "data_source": "javascript"
-                    }
-                else:
-                    print(f"⚠️ JavaScript extraction found {len(js_apartments)} apartments but without detailed info - continuing to HTML parsing")
-
-            # Try multiple expansion strategies
-            expansion_strategies = [
-                # Strategy 1: Look for buttons/links with expand-related text
-                "//button[contains(text(), 'View') or contains(text(), 'Show') or contains(text(), 'Details')]",
-                "//a[contains(text(), 'View') or contains(text(), 'Show') or contains(text(), 'Details')]",
-
-                # Strategy 2: Look for clickable elements with plan-related classes
-                "//*[contains(@class, 'plan') and (contains(@class, 'expand') or contains(@class, 'toggle'))]",
-                "//*[contains(@class, 'floor') and (contains(@class, 'expand') or contains(@class, 'toggle'))]",
-
-                # Strategy 3: Look for any clickable elements with apartment/unit classes
-                "//*[contains(@class, 'apartment') or contains(@class, 'unit') or contains(@class, 'floorplan')][not(contains(@class, 'text'))]",
-
-                # Strategy 4: Generic clickable elements that might expand content
-                "//div[@role='button']", "//div[contains(@class, 'clickable')]",
-
-                # Strategy 5: Look for elements with data attributes
-                "//*[@data-floor-plan or @data-unit or @data-apartment]",
-            ]
-
-            total_expanded = 0
-
-            for i, strategy in enumerate(expansion_strategies):
-                try:
-                    elements = self.driver.find_elements(By.XPATH, strategy)
-                    print(f"   Strategy {i+1}: Found {len(elements)} elements")
-
-                    for element in elements[:8]:  # Limit to avoid excessive clicking
-                        try:
+                        elements = self.driver.find_elements(By.XPATH, selector)
+                        for element in elements:
                             if element.is_displayed() and element.is_enabled():
-                                # Scroll element into view
-                                self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
-                                time.sleep(0.5)
-
-                                # Try clicking
+                                print(f"   Found 2-bedroom filter: {element.text}")
+                                self.driver.execute_script("arguments[0].scrollIntoView();", element)
+                                time.sleep(1)
                                 self.driver.execute_script("arguments[0].click();", element)
-                                total_expanded += 1
-                                time.sleep(0.8)  # Wait for content to load
+                                print("   ✅ Applied 2-bedroom filter")
+                                time.sleep(5)  # Wait for filter to apply
+                                filter_applied = True
+                                break
+                    except Exception as e:
+                        continue
+                    if filter_applied:
+                        break
 
-                        except Exception as e:
-                            continue
-
-                except Exception as e:
-                    continue
-
-            print(f"✅ Expansion completed - attempted {total_expanded} clicks")
-
-            # Additional wait for content to load after expansion
-            time.sleep(8)
-
-            # Try scrolling to load more content
-            print("📜 Scrolling to load additional content...")
-            for i in range(3):
-                self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(2)
-                self.driver.execute_script("window.scrollTo(0, 0);")
-                time.sleep(2)
-
-            # Get page source after expanding
-            content = self.driver.page_source
-
-            # Debug: Check if we got apartment content and look for actual structure
-            dollar_count = content.count('$')
-            plan_count = content.count('Plan ')
-            print(f"📊 Content analysis: {len(content)} chars, {dollar_count} '$' symbols, {plan_count} 'Plan ' mentions")
-
-            # Look for actual apartment container patterns
-            unit_containers = len(re.findall(r'data-unit-id', content))
-            fapt_containers = len(re.findall(r'fapt-fp-unit', content))
-            apartment_patterns = len(re.findall(r'apartment|unit.*\$|floor.*plan', content, re.I))
-
-            print(f"🔍 Structure analysis: {unit_containers} data-unit-id, {fapt_containers} fapt-fp-unit, {apartment_patterns} apartment patterns")
-
-            if dollar_count < 5:
-                print("⚠️ Warning: Very few price indicators found, content may not be fully loaded")
-
-            # Debug: Save a sample of the content to see what we're working with
-            debug_file = "debug_content.html"
-            try:
-                with open(debug_file, 'w', encoding='utf-8') as f:
-                    f.write(content[:200000])  # Save first 200k chars to see more content
-                print(f"✅ Debug content saved to {debug_file}")
-
-                # Also save a snippet around any apartment data we find
-                apartment_snippet_file = "apartment_snippet.html"
-                first_dollar = content.find('$')
-                if first_dollar > -1:
-                    start = max(0, first_dollar - 2000)
-                    end = min(len(content), first_dollar + 5000)
-                    snippet = content[start:end]
-                    with open(apartment_snippet_file, 'w', encoding='utf-8') as f:
-                        f.write(snippet)
-                    print(f"✅ Apartment snippet saved to {apartment_snippet_file}")
+                if not filter_applied:
+                    print("   ⚠️ Could not find 2-bedroom filter button - may need to navigate differently")
 
             except Exception as e:
-                print(f"⚠️ Could not save debug content: {e}")
+                print(f"   ⚠️ Error applying bedroom filter: {e}")
 
-            # Parse apartment details from HTML
-            apartments = self.parse_apartment_details(content)
+            # Additional wait after applying filter
+            if filter_applied:
+                print("⏳ Waiting for filtered results to load...")
+                time.sleep(10)
+
+                # Scroll again to load filtered content
+                for scroll_attempt in range(3):
+                    self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    time.sleep(2)
+                    self.driver.execute_script("window.scrollTo(0, 0);")
+                    time.sleep(2)
+
+            # Get final page content after all loading
+            final_content = self.driver.page_source
+
+            # Save the webpage content for parsing
+            website_snapshot_file = "website_snapshot.html"
+            print(f"💾 Saving webpage content to {website_snapshot_file}")
+            try:
+                with open(website_snapshot_file, 'w', encoding='utf-8') as f:
+                    f.write(final_content)
+                print(f"✅ Webpage saved: {len(final_content)} characters")
+            except Exception as e:
+                print(f"⚠️ Could not save webpage: {e}")
+
+            # Now parse the saved content
+            print("🔍 Parsing saved webpage content...")
+            apartments = self.parse_apartment_details(final_content)
 
             # Create a hash of the content to detect changes
-            content_hash = hashlib.md5(content.encode()).hexdigest()
+            content_hash = hashlib.md5(final_content.encode()).hexdigest()
 
             return {
                 "timestamp": datetime.now().isoformat(),
-                "status_code": 200,  # Assume success if we got here
+                "status_code": 200,
                 "content_hash": content_hash,
-                "content_length": len(content),
+                "content_length": len(final_content),
                 "apartments": apartments,
                 "total_apartments": len(apartments),
-                "content_preview": content[:1000] + "..." if len(content) > 1000 else content
+                "data_source": "selenium_live",
+                "note": "Live website data fetched via Selenium and saved locally"
             }
 
         except WebDriverException as e:
