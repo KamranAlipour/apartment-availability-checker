@@ -54,6 +54,7 @@ apartment_data.json
 debug_content.html
 apartment_snippet.html
 website_snapshot.html
+website_snapshot_files/
 
 # Temporary files
 *.tmp
