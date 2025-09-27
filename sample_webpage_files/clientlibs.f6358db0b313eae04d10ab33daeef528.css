@@ -1,0 +1,79 @@
+.navigation-separator {
+  background: #55758e;
+  color: #ffffff;
+  font-family: 'miller-display', serif;
+  font-weight: 300;
+  font-size: 1.8rem;
+  line-height: 2rem;
+  letter-spacing: 0.02rem;
+}
+.navigation-separator a {
+  color: #ffffff;
+  text-decoration: none;
+}
+@media (hover: hover), (-ms-high-contrast:none) {
+  .navigation-separator a:hover {
+    color: #1c2a33;
+  }
+}
+.navigation-separator .apts-icon {
+  line-height: 2.6rem;
+  font-size: 1.2rem;
+  position: relative;
+}
+.navigation-separator .apts-icon-left-arrow {
+  margin-right: 0.6rem;
+  padding-bottom: 0;
+}
+.navigation-separator .apts-icon-right-arrow {
+  margin-left: 0.6rem;
+}
+.navigation-separator__row {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.navigation-separator__btn {
+  flex: 1;
+  padding-bottom: 1.4rem;
+  padding-top: 1.4rem;
+}
+.navigation-separator__btn:last-of-type {
+  text-align: right;
+}
+.navigation-separator__btn--has-border {
+  border-left: 1px solid #ffffff;
+}
+@media screen and (min-width: 576px) {
+  .navigation-separator__btn:last-of-type {
+    text-align: right;
+  }
+}
+@media screen and (min-width: 768px) {
+  .navigation-separator {
+    font-size: 2.4rem;
+    line-height: 2.6rem;
+    letter-spacing: -0.03rem;
+  }
+  .navigation-separator__btn {
+    padding-bottom: 1.9rem;
+    padding-top: 1.9rem;
+  }
+  .navigation-separator__btn--has-border {
+    border-left: none;
+  }
+  .navigation-separator .apts-icon-left-arrow {
+    top: -0.3rem;
+  }
+  .navigation-separator .apts-icon-left-arrow {
+    top: -0.1rem;
+  }
+}
+@media screen and (min-width: 769px) and (max-width: 991px) {
+  .navigation-separator__row {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 67.8rem !important;
+  }
+}

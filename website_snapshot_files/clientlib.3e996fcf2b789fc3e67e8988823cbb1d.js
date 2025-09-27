@@ -1,0 +1,1 @@
+Vue.component("gallery-item",{template:"#gallery-item-tpl",props:{item:{type:Object,required:!0},imgHoverEffect:{type:Boolean,default:!1}},data:function data(){return{showGalleryItem:!1}},computed:{pageTitle:function pageTitle(){return this.$store.getters.pageTitle}},mounted:function mounted(){var _this=this;this.$nextTick((function(){_this.showGalleryItem=!0}))}});

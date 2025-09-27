@@ -1,0 +1,241 @@
+.gallery-modal-wrapper .item-to-animate-movement {
+  overflow: hidden;
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  will-change: top, left, height, width, opacity, display;
+  background-color: #000000;
+  transform: translate3d(0, 0, 0);
+}
+.gallery-modal-wrapper .item-to-animate-movement__image {
+  height: 100%;
+  width: 100%;
+  will-change: height, object-fit, object-position;
+  transition: all 0.4s linear;
+  object-fit: cover;
+}
+.gallery-modal-wrapper__global-loader {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 10000;
+  opacity: 1;
+  transition: all 0.2s;
+}
+.gallery-modal-wrapper__global-loader::after {
+  content: '';
+  width: 30px;
+  height: 30px;
+  padding: 30px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #222222;
+  background-image: url('../../../../../../etc.clientlibs/settings/wcm/designs/ticshared/clientlib-site/resources/images/load_icon_darkbg.gif');
+  background-size: 50px;
+  position: absolute;
+  top: 50%;
+  border-radius: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.gallery-modal-wrapper__modal-content {
+  position: fixed;
+  z-index: 9998;
+  top: -90px;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #000000;
+  transition: all 0.2s linear;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+@media screen and (min-width: 1200px) {
+  .gallery-modal-wrapper__modal-content {
+    justify-content: normal;
+  }
+}
+.gallery-modal-wrapper__modal-content--visible {
+  opacity: 1;
+  top: 0;
+}
+.gallery-modal-wrapper__modal-content--no-y-translate {
+  top: 0;
+  transition: opacity 0.2s linear;
+}
+.gallery-modal-wrapper__modal-content--transition-in-progress .gallery-modal-wrapper__grid .gallery-grid__item .gallery-item {
+  transform: scale(0.75);
+  opacity: 0;
+  transition: all 0.2s linear;
+}
+.gallery-modal-wrapper__modal-content--transition-in-progress .gallery-modal-wrapper__carousel .gallery-carousel__navigation-box {
+  transform: scale(0.5);
+  opacity: 0;
+  transition: all 0.2s linear;
+}
+.gallery-modal-wrapper__modal-content--shows-loader {
+  padding-bottom: 0;
+}
+.gallery-modal-wrapper__modal-content--shows-loader .gallery-modal-wrapper__section-content {
+  margin-bottom: 0;
+}
+.gallery-modal-wrapper__section--grid {
+  padding-left: 0;
+  padding-right: 0;
+}
+.gallery-modal-wrapper__section-content {
+  transition: opacity 0.2s ease-in;
+  opacity: 0;
+}
+.gallery-modal-wrapper__section-content--visible {
+  opacity: 1;
+}
+.gallery-modal-wrapper__title {
+  display: block;
+  clear: both;
+  font-size: 12px;
+  margin: 38px 0 4px 0;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #575759;
+  text-transform: uppercase;
+}
+@media screen and (max-width: 991px) {
+  .gallery-modal-wrapper__title {
+    margin: 10px 0;
+  }
+}
+.gallery-modal-wrapper__floorplan-info {
+  text-align: center;
+}
+.gallery-modal-wrapper__empty-state {
+  text-align: center;
+  line-height: 18px;
+  font-size: 20px;
+  color: #222222;
+  padding: 20px;
+}
+.gallery-modal-wrapper__empty-state-reset {
+  color: #5383b6;
+  cursor: pointer;
+}
+.gallery-modal-wrapper__copy-url {
+  margin-left: 30px;
+}
+.gallery-modal-wrapper__loader {
+  display: flex;
+  height: calc(100vh - 26px);
+  position: relative;
+}
+.gallery-modal-wrapper__loader::before {
+  content: '';
+  background-image: url('../../../../../../etc.clientlibs/settings/wcm/designs/ticshared/clientlib-site/resources/images/load_icon_darkbg.gif');
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-size: 40px;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  transform: all 0.2s;
+}
+.gallery-modal-wrapper .apts-modal__header-section {
+  display: flex;
+  align-items: center;
+}
+@media screen and (min-width: 769px) {
+  .gallery-modal-wrapper__filter-container {
+    padding: 33px 21px 3px 21px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .gallery-modal-wrapper__section--carousel {
+    overflow-x: hidden;
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .gallery-modal-wrapper__section--carousel {
+    overflow: visible;
+  }
+}
+.gallery-modal-wrapper .apts-modal--has-sticky-header.gallery-modal-wrapper__sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 11;
+  background-color: transparent;
+}
+.gallery-modal-wrapper .apts-modal--has-sticky-header.gallery-modal-wrapper__sticky-header--scrolled {
+  background-color: #f5f5f5;
+}
+.gallery-modal-wrapper .apts-modal--has-sticky-header.gallery-modal-wrapper__sticky-header .gallery-filter .icon-button {
+  margin-left: 29px;
+}
+.gallery-modal-wrapper .apts-modal--has-sticky-header.gallery-modal-wrapper__sticky-header .gallery-modal-wrapper__header {
+  transition: all 0.2s linear;
+  opacity: 1;
+  position: sticky;
+  top: 0;
+  background-color: #000000;
+}
+.gallery-modal-wrapper .apts-modal--has-sticky-header.gallery-modal-wrapper__sticky-header .gallery-modal-wrapper__header--hidden {
+  opacity: 0;
+  top: -90px;
+  transform: translateY(-100%);
+  transition: none;
+}
+.gallery-modal-wrapper .apts-modal--has-sticky-header.gallery-modal-wrapper__sticky-header .gallery-modal-wrapper__header--carousel .gallery-modal-wrapper__header-wrapper {
+  padding: 2% 4%;
+}
+.gallery-modal-wrapper .apts-modal--has-sticky-header.gallery-modal-wrapper__sticky-header .gallery-modal-wrapper__header-wrapper {
+  padding: 2% 4%;
+}
+.gallery-modal-wrapper .apts-modal--has-sticky-header.gallery-modal-wrapper__sticky-header .gallery-modal-wrapper__close {
+  position: static;
+  transform: translateY(2px);
+  margin: 0 0 0 20px;
+  padding: 0;
+}
+.gallery-modal-wrapper .apts-modal--has-sticky-header.gallery-modal-wrapper__sticky-header .gallery-modal-wrapper__close::before {
+  font-size: 18px;
+  background-color: transparent;
+  color: #ffffff;
+}
+@media screen and (max-width: 575px) {
+  .gallery-modal-wrapper .apts-modal--has-sticky-header.gallery-modal-wrapper__sticky-header .gallery-modal-wrapper__header--grid .gallery-modal-wrapper__header-section--right {
+    flex: 1;
+    justify-content: space-between;
+  }
+}
+@media screen and (min-width: 768px) {
+  .gallery-modal-wrapper .apts-modal--has-sticky-header.gallery-modal-wrapper__sticky-header .gallery-modal-wrapper__header .gallery-filter .icon-button {
+    margin-left: 20px;
+  }
+  .gallery-modal-wrapper .apts-modal--has-sticky-header.gallery-modal-wrapper__sticky-header .gallery-modal-wrapper__header-wrapper {
+    padding: 12px 25px 11px;
+  }
+}
+.gallery-modal-wrapper__header-inner-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.gallery-modal-wrapper__back-btn {
+  color: #ffffff;
+}
+

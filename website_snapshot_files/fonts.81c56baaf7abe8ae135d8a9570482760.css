@@ -1,0 +1,693 @@
+@font-face {
+  font-family: 'apts-icomoon';
+  src: url('fonts/resources/apts-icomoon.eot?v=1744653225');
+  src: url('fonts/resources/apts-icomoon.eot?v=1744653225#iefix') format('embedded-opentype'), url('fonts/resources/apts-icomoon.ttf?v=1744653225') format('truetype'), url('fonts/resources/apts-icomoon.woff?v=1744653225') format('woff'), url('fonts/resources/apts-icomoon.svg?v=1744653225#apts-icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+[class^="apts-icon-"],
+[class*=" apts-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'apts-icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.apts-icon-arrow-down:before {
+  content: "\e900";
+}
+.apts-icon-close:before {
+  content: "\e901";
+}
+.apts-icon-community:before {
+  content: "\e902";
+}
+.apts-icon-Default:before {
+  content: "\e903";
+}
+.apts-icon-dining:before {
+  content: "\e904";
+}
+.apts-icon-entertainment:before {
+  content: "\e905";
+}
+.apts-icon-fb-icon:before {
+  content: "\e906";
+}
+.apts-icon-insta-icon:before {
+  content: "\e907";
+}
+.apts-icon-linkedin-icon:before {
+  content: "\e908";
+}
+.apts-icon-garage:before {
+  content: "\e909";
+}
+.apts-icon-instagram:before {
+  content: "\e90a";
+}
+.apts-icon-list1:before {
+  content: "\e90b";
+}
+.apts-icon-location:before {
+  content: "\e90c";
+}
+.apts-icon-map1:before {
+  content: "\e90d";
+}
+.apts-icon-map-pin:before {
+  content: "\e90e";
+}
+.apts-icon-pets:before {
+  content: "\e90f";
+}
+.apts-icon-plus:before {
+  content: "\e910";
+}
+.apts-icon-quick-view:before {
+  content: "\e911";
+}
+.apts-icon-recreation:before {
+  content: "\e912";
+}
+.apts-icon-twitter-icon:before {
+  content: "\e913";
+}
+.apts-icon-search:before {
+  content: "\e914";
+}
+.apts-icon-search-lg:before {
+  content: "\e915";
+}
+.apts-icon-select:before {
+  content: "\e916";
+}
+.apts-icon-shopping:before {
+  content: "\e917";
+}
+.apts-icon-shower:before {
+  content: "\e918";
+}
+.apts-icon-single-garage:before {
+  content: "\e919";
+}
+.apts-icon-stainless:before {
+  content: "\e91a";
+}
+.apts-icon-townhome:before {
+  content: "\e91b";
+}
+.apts-icon-washer:before {
+  content: "\e91c";
+}
+.apts-icon-web:before {
+  content: "\e91d";
+}
+.apts-icon-wifi:before {
+  content: "\e91e";
+}
+.apts-icon-school:before {
+  content: "\e91f";
+}
+.apts-icon-right-arrow:before {
+  content: "\e920";
+}
+.apts-icon-floor:before {
+  content: "\e921";
+}
+.apts-icon-fav-filled:before {
+  content: "\e922";
+}
+.apts-icon-fav:before {
+  content: "\e923";
+}
+.apts-icon-BBQ:before {
+  content: "\e924";
+}
+.apts-icon-Beach:before {
+  content: "\e925";
+}
+.apts-icon-left-carousel-arrow1:before {
+  content: "\e926";
+}
+.apts-icon-right-carousel-arrow1:before {
+  content: "\e927";
+}
+.apts-icon-Bike:before {
+  content: "\e928";
+}
+.apts-icon-Cat_Friendly:before {
+  content: "\e929";
+}
+.apts-icon-Communities:before {
+  content: "\e92a";
+}
+.apts-icon-Concierge_Services:before {
+  content: "\e92b";
+}
+.apts-icon-Courtesy_patrol:before {
+  content: "\e92c";
+}
+.apts-icon-Covered_Parking:before {
+  content: "\e92d";
+}
+.apts-icon-Co-workSpace:before {
+  content: "\e92e";
+}
+.apts-icon-Destination_Cities:before {
+  content: "\e92f";
+}
+.apts-icon-DropOff-_Zone:before {
+  content: "\e930";
+}
+.apts-icon-Drycleaning:before {
+  content: "\e931";
+}
+.apts-icon-Elevator:before {
+  content: "\e932";
+}
+.apts-icon-Energy:before {
+  content: "\e933";
+}
+.apts-icon-Entertainment:before {
+  content: "\e934";
+}
+.apts-icon-EV_Station:before {
+  content: "\e935";
+}
+.apts-icon-Finishes_Amenities:before {
+  content: "\e936";
+}
+.apts-icon-Fire-Pits:before {
+  content: "\e937";
+}
+.apts-icon-Fitness_Center:before {
+  content: "\e938";
+}
+.apts-icon-Floorplans:before {
+  content: "\e939";
+}
+.apts-icon-Free_Consultation:before {
+  content: "\e93a";
+}
+.apts-icon-Freeway_Access:before {
+  content: "\e93b";
+}
+.apts-icon-Furnished:before {
+  content: "\e93c";
+}
+.apts-icon-Gate:before {
+  content: "\e93d";
+}
+.apts-icon-Golf:before {
+  content: "\e93e";
+}
+.apts-icon-Hospitals:before {
+  content: "\e93f";
+}
+.apts-icon-Insuite_Washerdryer:before {
+  content: "\e940";
+}
+.apts-icon-Kids_Play_Area:before {
+  content: "\e941";
+}
+.apts-icon-Lounge_Area:before {
+  content: "\e942";
+}
+.apts-icon-Mail:before {
+  content: "\e943";
+}
+.apts-icon-Nearby_Shopping:before {
+  content: "\e944";
+}
+.apts-icon-Nest_Thermostat:before {
+  content: "\e945";
+}
+.apts-icon-Online_Chat:before {
+  content: "\e946";
+}
+.apts-icon-Onsite_Dining_Cafe:before {
+  content: "\e947";
+}
+.apts-icon-Onsite_Retail:before {
+  content: "\e948";
+}
+.apts-icon-Package_Deliveryroom:before {
+  content: "\e949";
+}
+.apts-icon-Parking:before {
+  content: "\e94a";
+}
+.apts-icon-Parks:before {
+  content: "\e94b";
+}
+.apts-icon-Parks_Trails:before {
+  content: "\e94c";
+}
+.apts-icon-Personal_Garage:before {
+  content: "\e94d";
+}
+.apts-icon-Petfriendly:before {
+  content: "\e94e";
+}
+.apts-icon-Pool_Spa:before {
+  content: "\e94f";
+}
+.apts-icon-Schools:before {
+  content: "\e950";
+}
+.apts-icon-Shuttle_Service:before {
+  content: "\e951";
+}
+.apts-icon-Smokefree:before {
+  content: "\e952";
+}
+.apts-icon-Transit:before {
+  content: "\e953";
+}
+.apts-icon-Trash:before {
+  content: "\e954";
+}
+.apts-icon-Walkability:before {
+  content: "\e955";
+}
+.apts-icon-WiFi:before {
+  content: "\e956";
+}
+.apts-icon-Yoga:before {
+  content: "\e957";
+}
+.apts-icon-pinterest:before {
+  content: "\e958";
+}
+.apts-icon-back-to-top:before {
+  content: "\e959";
+}
+.apts-icon-neighborhood:before {
+  content: "\e95a";
+}
+.apts-icon-plan-commute:before {
+  content: "\e95b";
+}
+.apts-icon-pencil:before {
+  content: "\e95c";
+}
+.apts-icon-floorplan:before {
+  content: "\e95d";
+}
+.apts-icon-list:before {
+  content: "\e95e";
+}
+.apts-icon-map:before {
+  content: "\e95f";
+}
+.apts-icon-3d:before {
+  content: "\e960";
+}
+.apts-icon-camera:before {
+  content: "\e961";
+}
+.apts-icon-chat:before {
+  content: "\e962";
+}
+.apts-icon-magnify:before {
+  content: "\e963";
+}
+.apts-icon-person:before {
+  content: "\e964";
+}
+.apts-icon-phone:before {
+  content: "\e965";
+}
+.apts-icon-share-arrow:before {
+  content: "\e966";
+}
+.apts-icon-video-player:before {
+  content: "\e967";
+}
+.apts-icon-grid:before {
+  content: "\e968";
+}
+.apts-icon-img-folder:before {
+  content: "\e969";
+}
+.apts-icon-swipe:before {
+  content: "\e96a";
+}
+.apts-icon-zoom-in:before {
+  content: "\e96b";
+}
+.apts-icon-zoom-out:before {
+  content: "\e96c";
+}
+.apts-icon-open-heart:before {
+  content: "\e96d";
+}
+.apts-icon-fav-heart:before {
+  content: "\e96e";
+}
+.apts-icon-arrow-top:before {
+  content: "\e96f";
+}
+.apts-icon-calendar:before {
+  content: "\e970";
+}
+.apts-icon-chevron-down:before {
+  content: "\e971";
+}
+.apts-icon-chevron-left:before {
+  content: "\e972";
+}
+.apts-icon-chevron-right:before {
+  content: "\e973";
+}
+.apts-icon-chevron-up:before {
+  content: "\e974";
+}
+.apts-icon-close1:before {
+  content: "\e975";
+}
+.apts-icon-facebook:before {
+  content: "\e976";
+}
+.apts-icon-flourish:before {
+  content: "\e977";
+}
+.apts-icon-heart:before {
+  content: "\e978";
+}
+.apts-icon-list2:before {
+  content: "\e979";
+}
+.apts-icon-map-point:before {
+  content: "\e97a";
+}
+.apts-icon-menu:before {
+  content: "\e97b";
+}
+.apts-icon-minus1:before {
+  content: "\e97c";
+}
+.apts-icon-pinterest1:before {
+  content: "\e97d";
+}
+.apts-icon-plus1:before {
+  content: "\e97e";
+}
+.apts-icon-search1:before {
+  content: "\e97f";
+}
+.apts-icon-arrow-right:before {
+  content: "\e980";
+}
+.apts-icon-arrow-left:before {
+  content: "\e981";
+}
+.apts-icon-arrow-down1:before {
+  content: "\e982";
+}
+.apts-icon-arrow-up:before {
+  content: "\e983";
+}
+.apts-icon-double-chevron:before {
+  content: "\e984";
+}
+.apts-icon-uniE918:before {
+  content: "\e985";
+}
+.apts-icon-uniE919:before {
+  content: "\e986";
+}
+.apts-icon-expand:before {
+  content: "\e987";
+}
+.apts-icon-slash:before {
+  content: "\e988";
+}
+.apts-icon-grouped:before {
+  content: "\e989";
+}
+.apts-icon-check-small:before {
+  content: "\e98a";
+}
+.apts-icon-check:before {
+  content: "\e98b";
+}
+.apts-icon-check-inverse:before {
+  content: "\e98c";
+}
+.apts-icon-double-quote:before {
+  content: "\e98d";
+}
+.apts-icon-bullseye:before {
+  content: "\e98e";
+}
+.apts-icon-chain-interlock:before {
+  content: "\e98f";
+}
+.apts-icon-entertainment1:before {
+  content: "\e990";
+}
+.apts-icon-suitcase:before {
+  content: "\e991";
+}
+.apts-icon-shopping1:before {
+  content: "\e992";
+}
+.apts-icon-restaurants:before {
+  content: "\e993";
+}
+.apts-icon-parks:before {
+  content: "\e994";
+}
+.apts-icon-threesixty-view:before {
+  content: "\e995";
+}
+.apts-icon-play:before {
+  content: "\e996";
+}
+.apts-icon-photo-view:before {
+  content: "\e997";
+}
+.apts-icon-home:before {
+  content: "\e998";
+}
+.apts-icon-mass-transit:before {
+  content: "\e999";
+}
+.apts-icon-map-pip:before {
+  content: "\e99a";
+}
+.apts-icon-info:before {
+  content: "\e99b";
+}
+.apts-icon-new-page:before {
+  content: "\e99c";
+}
+.apts-icon-packageit:before {
+  content: "\e99d";
+}
+.apts-icon-login:before {
+  content: "\e99e";
+}
+.apts-icon-logo:before {
+  content: "\e99f";
+}
+.apts-icon-c-logo:before {
+  content: "\e9a0";
+}
+.apts-icon-k-logo:before {
+  content: "\e9a1";
+}
+.apts-icon-linkedin:before {
+  content: "\e9a2";
+}
+.apts-icon-vine:before {
+  content: "\e9a3";
+}
+.apts-icon-twitter:before {
+  content: "\e9a4";
+}
+.apts-icon-play-button:before {
+  content: "\e9a5";
+}
+.apts-icon-trash-icon:before {
+  content: "\e9a6";
+}
+.apts-icon-share:before {
+  content: "\e9a7";
+}
+.apts-icon-search-icon-left:before {
+  content: "\e9a8";
+}
+.apts-icon-email:before {
+  content: "\e9a9";
+}
+.apts-icon-beaches:before {
+  content: "\e9aa";
+}
+.apts-icon-communities:before {
+  content: "\e9ab";
+}
+.apts-icon-floorplan1:before {
+  content: "\e9ac";
+}
+.apts-icon-gift-card:before {
+  content: "\e9ad";
+}
+.apts-icon-keys:before {
+  content: "\e9ae";
+}
+.apts-icon-tag:before {
+  content: "\e9af";
+}
+.apts-icon-gift:before {
+  content: "\e9b0";
+}
+.apts-icon-lock:before {
+  content: "\e9b1";
+}
+.apts-icon-dining1:before {
+  content: "\e9b2";
+}
+.apts-icon-parkstrails:before {
+  content: "\e9b3";
+}
+.apts-icon-schools:before {
+  content: "\e9b4";
+}
+.apts-icon-instagram1:before {
+  content: "\e9b5";
+}
+.apts-icon-map-point-solid:before {
+  content: "\e9b6";
+}
+.apts-icon-map-point-outline:before {
+  content: "\e9b7";
+}
+.apts-icon-phone1:before {
+  content: "\e9b8";
+}
+.apts-icon-arrow-double:before {
+  content: "\e9b9";
+}
+.apts-icon-cities:before {
+  content: "\e9ba";
+}
+.apts-icon-redo2:before {
+  content: "\e9bb";
+}
+.apts-icon-list11:before {
+  content: "\e9bc";
+}
+.apts-icon-location1:before {
+  content: "\e9bd";
+}
+.apts-icon-map-pin1:before {
+  content: "\e9be";
+}
+.apts-icon-search11:before {
+  content: "\e9bf";
+}
+.apts-icon-search-lg1:before {
+  content: "\e9c0";
+}
+.apts-icon-fav-filled1:before {
+  content: "\e9c1";
+}
+.apts-icon-fav1:before {
+  content: "\e9c2";
+}
+.apts-icon-map2:before {
+  content: "\e9c3";
+}
+.apts-icon-right-arrow1:before {
+  content: "\e9c4";
+}
+.apts-icon-AccessToEssentials:before {
+  content: "\e9c5";
+}
+.apts-icon-ConnectedHome:before {
+  content: "\e9c6";
+}
+.apts-icon-HomeTeamCare:before {
+  content: "\e9c7";
+}
+.apts-icon-LiveReady:before {
+  content: "\e9c8";
+}
+.apts-icon-LongTermOwnership:before {
+  content: "\e9c9";
+}
+.apts-icon-LoveYourHome:before {
+  content: "\e9ca";
+}
+.apts-icon-MoveSaver:before {
+  content: "\e9cb";
+}
+.apts-icon-OnlineLeasing:before {
+  content: "\e9cc";
+}
+.apts-icon-RentAssist:before {
+  content: "\e9cd";
+}
+.apts-icon-SearchOnline:before {
+  content: "\e9ce";
+}
+.apts-icon-TermSelect:before {
+  content: "\e9cf";
+}
+.apts-icon-VirtualTour:before {
+  content: "\e9d0";
+}
+.apts-icon-fullscreen:before {
+  content: "\e9d1";
+}
+.apts-icon-minus:before {
+  content: "\ea0b";
+}
+.apts-icon-three-dots:before {
+  content: "\f141";
+}
+.apts-icon-sort:before {
+  content: "\e9d2";
+}
+.apts-icon-equalizer:before {
+  content: "\e9d3";
+}
+
+.apts-icon-hardwood::before {
+  content: '';
+  display: inline-block;
+  width: 3.2rem;
+  height: 3.2rem;
+  background-image: url('../../../etc.clientlibs/apartments/clientlibs/resources/hardwood.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.apts-icon-minus::before {
+  content: '';
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  background-image: url('../../../etc.clientlibs/apartments/clientlibs/resources/minus.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.apts-icon-left-arrow {
+  display: inline-block;
+  transform: rotate(180deg);
+}
+.apts-icon-left-arrow::before {
+  content: "\e920";
+}
+

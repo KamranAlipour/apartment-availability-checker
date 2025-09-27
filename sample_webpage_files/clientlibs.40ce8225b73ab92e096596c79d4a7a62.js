@@ -1,0 +1,1 @@
+Vue.component("icon-button",{template:"#icon-button-tpl",props:["tooltipContent","onIconButtonClickCallback","tooltipAlign","customClass","icon"]});

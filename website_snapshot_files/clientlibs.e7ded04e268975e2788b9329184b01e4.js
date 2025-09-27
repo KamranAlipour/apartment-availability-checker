@@ -1,0 +1,1 @@
+Vue.component("reset",{template:"#reset-tpl",props:["resetCallback","prefix","resetText","reverseIcon"],methods:{triggerReset:function triggerReset(e){this.$listeners.resetCallback&&this.$emit("resetCallback")}}});

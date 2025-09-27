@@ -1,0 +1,10 @@
+.legal-disclaimer__text {
+  font-size: 1.1rem;
+  line-height: 1.4rem;
+  letter-spacing: -0.025rem;
+  color: #575759;
+  margin: 1.7rem 0;
+}
+.legal-disclaimer--hidden {
+  display: none;
+}

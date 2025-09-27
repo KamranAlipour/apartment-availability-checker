@@ -1,0 +1,32 @@
+#legal-notification-banner {
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 400;
+  color: #1c2a33;
+  letter-spacing: -0.25px;
+  font-size: 13px;
+}
+#legal-notification-banner .banner__close.pill-btn {
+  vertical-align: middle;
+  border: 1px solid #f37120;
+  padding: 5px 10px;
+  font-size: 12px;
+  transition: all 0.3s linear, height 0s;
+  -o-transition: all 0.3s linea, height 0sr;
+  -webkit-transition: all 0.3s linear, height 0s;
+}
+@media screen and (max-width: 575px) {
+  #legal-notification-banner {
+    letter-spacing: 0;
+    font-size: 10px;
+  }
+  #legal-notification-banner .banner__close.pill-btn {
+    font-size: 10px;
+  }
+}
+@media print {
+  #legal-notification-banner {
+    display: none !important;
+  }
+}

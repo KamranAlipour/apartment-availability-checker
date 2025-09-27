@@ -1,0 +1,937 @@
+@keyframes itemCardFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes itemCardloaderSpin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.search-result-item-card {
+  cursor: pointer;
+  margin-bottom: 4.4rem;
+}
+.search-result-item-card.search-result-item-card--hovered .search-result-item-card__cta--link {
+  background-color: #f37120;
+  border-color: #f37120;
+  color: #ffffff;
+}
+.search-result-item-card:last-child {
+  margin-bottom: 0;
+}
+.search-result-item-card__image-container {
+  width: 100%;
+  height: 21.1rem;
+  position: relative;
+}
+.search-result-item-card__image-container::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+  transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.search-result-item-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+  opacity: 0;
+  animation: itemCardFadeIn 0.2s forwards ease-in;
+  z-index: 2;
+  position: relative;
+}
+.search-result-item-card__image--placeholder {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: #c7d3dc;
+}
+.search-result-item-card__image--placeholder::after {
+  content: '';
+  width: 60px;
+  height: 60px;
+  background-image: url('../../../../../etc.clientlibs/apartments/clientlibs/resources/logo-sun-wave.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: block;
+  position: absolute;
+  left: calc(50% - 30px);
+  top: calc(50% - 30px);
+  animation: itemCardloaderSpin 1s linear infinite;
+}
+.search-result-item-card__image--error::after {
+  animation: none;
+}
+.search-result-item-card__status {
+  position: absolute;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+  border-radius: 0 0 1.2rem 1.2rem;
+  background-color: #1c2a33;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 700;
+  width: 100px;
+  height: 24px;
+  width: 10rem;
+  height: 2.4rem;
+  top: 0;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.72px;
+  font-size: 1rem;
+  line-height: 2.6rem;
+}
+.search-result-item-card__status.hide {
+  display: none;
+}
+.search-result-item-card__special-offer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 2;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+}
+.search-result-item-card__special-offer-copy {
+  background-color: #f37120;
+  color: #ffffff;
+  max-width: 90%;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 1.2rem 1.2rem 0 0;
+}
+.search-result-item-card__special-offer-heading {
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 700;
+}
+.search-result-item-card__content-wrapper {
+  position: relative;
+  min-height: 14.3rem;
+  padding-right: 7.5rem;
+  padding-left: 2.4rem;
+  padding-top: 1.6rem;
+}
+.search-result-item-card__cta-container {
+  right: 2.4rem;
+  width: 3.2rem;
+  position: absolute;
+  top: 0;
+}
+.search-result-item-card__cta-container--top {
+  top: 0.7rem;
+}
+.search-result-item-card__cta-container--bottom {
+  top: auto;
+  bottom: 0;
+}
+.search-result-item-card__cta:not(:first-child) {
+  margin-top: 1.6rem;
+}
+.search-result-item-card__content--name {
+  font-size: 2rem;
+  line-height: 2.2rem;
+  letter-spacing: -0.25px;
+  margin-bottom: 0.4rem;
+  margin-top: 0;
+  color: #1c2a33;
+  font-family: 'miller-display', serif;
+}
+.search-result-item-card__content--address {
+  font-size: 1.2rem;
+  line-height: 1.3rem;
+  margin-bottom: 2.8rem;
+  margin-top: 0;
+  color: #575759;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+.search-result-item-card__content--price {
+  font-size: 1.8rem;
+  line-height: 2rem;
+  letter-spacing: -0.72px;
+  margin-bottom: 0.6rem;
+  color: #1c2a33;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 700;
+}
+.search-result-item-card__content .beds-baths-sqft {
+  margin: 0;
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+  letter-spacing: -0.25px;
+  color: #575759;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 400;
+}
+.search-result-item-card__content--beds-baths {
+  margin: 0;
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+  letter-spacing: -0.25px;
+  color: #575759;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 400;
+}
+.search-result-item-card__content--sqft {
+  margin: 0;
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+  letter-spacing: -0.25px;
+  color: #575759;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+.search-result-item-card__inner--wide .search-result-item-card__content-wrapper {
+  width: 100%;
+  padding-right: 2.4rem;
+}
+.search-result-item-card__inner--wide .search-result-item-card__image-container {
+  position: relative;
+  height: auto;
+  padding-bottom: 56.25%;
+}
+.search-result-item-card__inner--wide .search-result-item-card__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.search-result-item-card__inner--wide .search-result-item-card__btn-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+}
+.search-result-item-card__inner--wide .search-result-item-card__content--name {
+  max-width: 100%;
+}
+@media screen and (max-width: 1199px) {
+  .search-result-item-card.search-result-item-card--hovered .btn-circular-with-icon {
+    background-color: #f37120;
+    border-color: #f37120;
+    color: #ffffff;
+  }
+}
+@media screen and (min-width: 576px) {
+  .search-result-item-card {
+    margin-bottom: 2.4rem;
+    position: relative;
+  }
+  .search-result-item-card:last-child {
+    margin-bottom: 0;
+  }
+  .search-result-item-card__image-container {
+    width: 25.6rem;
+    height: 25.6rem;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  .search-result-item-card__content-wrapper {
+    width: calc(100% - 262px);
+    position: static;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  .search-result-item-card__cta-container {
+    right: 0.9rem;
+  }
+  .search-result-item-card__content--name {
+    font-size: 2.4rem;
+    line-height: 2.6rem;
+    letter-spacing: -0.25px;
+  }
+  .search-result-item-card__content--address {
+    margin-bottom: 3.3rem;
+    margin-top: 0;
+  }
+  .search-result-item-card__content--price {
+    margin-bottom: 0.3rem;
+  }
+  .search-result-item-card__content--beds-baths {
+    margin-bottom: 0.3rem;
+  }
+  .search-result-item-card__inner--wide .search-result-item-card__image-container {
+    width: 44.4rem;
+    height: 25rem;
+    padding-bottom: 0;
+  }
+  .search-result-item-card__inner--wide .search-result-item-card__image {
+    position: relative;
+  }
+  .search-result-item-card__inner--wide .search-result-item-card__content-wrapper {
+    max-width: 44.4rem;
+  }
+  .search-result-item-card--featured-last {
+    margin-bottom: 1.6rem;
+  }
+}
+@media screen and (min-width: 769px) {
+  .search-result-item-card {
+    margin-bottom: 4.3rem;
+    position: static;
+  }
+  .search-result-item-card:last-child {
+    margin-bottom: 0;
+  }
+  .search-result-item-card__image-container {
+    width: 100%;
+    height: 20.8rem;
+    display: block;
+  }
+  .search-result-item-card__content-wrapper {
+    width: 100%;
+    display: block;
+    position: relative;
+    padding-top: 2rem;
+    padding-left: 0;
+  }
+  .search-result-item-card__cta-container {
+    right: 0;
+  }
+  .search-result-item-card__content--name {
+    font-size: 2rem;
+    line-height: 2.2rem;
+    letter-spacing: -0.25px;
+  }
+  .search-result-item-card__content--address {
+    margin-bottom: 2.6rem;
+  }
+  .search-result-item-card__content--price {
+    margin-bottom: 0.6rem;
+  }
+  .search-result-item-card__content--beds-baths {
+    margin-bottom: 0.3rem;
+  }
+  .search-result-item-card__content--sqft {
+    margin-bottom: 0.3rem;
+  }
+  .search-result-item-card__inner--wide .search-result-item-card__image-container {
+    width: 100%;
+    height: auto;
+    padding-bottom: 56.25%;
+  }
+  .search-result-item-card__inner--wide .search-result-item-card__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .search-result-item-card__inner--wide .search-result-item-card__content-wrapper {
+    max-width: none;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .search-result-item-card {
+    margin-bottom: 1.6rem;
+    position: relative;
+  }
+  .search-result-item-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.16);
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.16);
+    opacity: 0;
+    transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+  .search-result-item-card:last-child {
+    margin-bottom: 0;
+  }
+  .search-result-item-card__inner {
+    overflow: hidden;
+  }
+  .search-result-item-card__inner--wide .search-result-item-card__image-container {
+    width: 44.4rem;
+    height: 25rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0;
+  }
+  .search-result-item-card__inner--wide .search-result-item-card__image {
+    position: relative;
+  }
+  .search-result-item-card__inner--wide .search-result-item-card__btn-wrapper {
+    flex-direction: row;
+  }
+  .search-result-item-card__inner--wide .search-result-item-card__content-wrapper {
+    padding-right: 1.6rem;
+  }
+  .search-result-item-card__inner--wide .community-preview__btn--availability {
+    margin-right: 1.5rem;
+  }
+  .search-result-item-card__image-container {
+    width: 17.6rem;
+    height: 17.6rem;
+    float: left;
+  }
+  .search-result-item-card__cta:not(:first-child) {
+    margin-top: 0.8rem;
+  }
+  .search-result-item-card__content-wrapper {
+    width: calc(100% - 176px);
+    float: left;
+    position: static;
+    padding-top: 1.4rem;
+    padding-left: 1.6rem;
+    padding-right: 6rem;
+  }
+  .search-result-item-card__cta-container {
+    right: 1.2rem;
+  }
+  .search-result-item-card__cta-container--top {
+    top: 1.2rem;
+  }
+  .search-result-item-card__cta-container--bottom {
+    bottom: 0.8rem;
+  }
+  .search-result-item-card__cta {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .search-result-item-card__cta--label {
+    opacity: 1;
+  }
+  .search-result-item-card__content--name {
+    font-size: 2.4rem;
+    line-height: 2.6rem;
+    letter-spacing: -0.25px;
+    margin-bottom: 0.6rem;
+    max-width: 20rem;
+  }
+  .search-result-item-card__content--address {
+    margin-bottom: 1.9rem;
+  }
+  .search-result-item-card__content--beds-baths {
+    margin-bottom: 0.3rem;
+  }
+  .search-result-item-card__content--sqft {
+    margin-top: -0.4rem;
+    margin-bottom: 0;
+  }
+  .search-result-item-card:hover::before,
+  .search-result-item-card.search-result-item-card--hovered::before {
+    opacity: 1;
+  }
+  .search-result-item-card:hover .search-result-item-card__cta,
+  .search-result-item-card.search-result-item-card--hovered .search-result-item-card__cta {
+    opacity: 1;
+    pointer-events: initial;
+  }
+  .search-result-item-card:hover .search-result-item-card__cta--label,
+  .search-result-item-card.search-result-item-card--hovered .search-result-item-card__cta--label {
+    color: #1c2a33;
+  }
+  .search-result-item-card:hover .search-result-item-card__cta--label:hover,
+  .search-result-item-card.search-result-item-card--hovered .search-result-item-card__cta--label:hover {
+    color: #1c2a33;
+  }
+  .search-result-item-card:hover .search-result-item-card__cta--link,
+  .search-result-item-card.search-result-item-card--hovered .search-result-item-card__cta--link {
+    background-color: #f37120;
+    border-color: #f37120;
+    color: #ffffff;
+  }
+  .search-result-item-card:hover .search-result-item-card__image-container::before,
+  .search-result-item-card.search-result-item-card--hovered .search-result-item-card__image-container::before {
+    opacity: 0;
+  }
+  .search-result-item-card--featured-last {
+    margin-bottom: 1.1rem;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .search-result-item-card__image-container {
+    width: 20rem;
+    height: 20rem;
+    float: none;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  .search-result-item-card__content-wrapper {
+    width: calc(100% - 210px);
+    padding-top: 0;
+    padding-left: 1.6rem;
+    padding-bottom: 0.9rem;
+    float: none;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  .search-result-item-card__cta-container--bottom {
+    bottom: 1.2rem;
+  }
+  .search-result-item-card__content--name {
+    font-size: 2.4rem;
+    line-height: 2.6rem;
+    letter-spacing: -0.25px;
+    margin-bottom: 0.4rem;
+  }
+  .search-result-item-card__content--address {
+    margin-bottom: 1.8rem;
+  }
+  .search-result-item-card__content--beds-baths {
+    margin-bottom: 0.3rem;
+  }
+  .search-result-item-card__content--sqft {
+    margin-top: -0.4rem;
+    margin-bottom: 0;
+  }
+  .search-result-item-card--featured-last {
+    margin-bottom: 0.8rem;
+  }
+}
+@media screen and (min-width: 1440px) {
+  .search-result-item-card__inner--wide .search-result-item-card__image-container {
+    width: 100%;
+    height: auto;
+    padding-bottom: 56.25%;
+  }
+  .search-result-item-card__inner--wide .search-result-item-card__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+@media screen and (min-width: 3300px) {
+  .search-result-item-card__content-wrapper {
+    width: calc(100% - 700px);
+    padding-right: 4rem;
+  }
+}
+.search-result-item-card--infobox {
+  overflow: hidden;
+}
+.search-result-item-card--infobox .search-result-item-card__inner {
+  overflow: hidden;
+}
+.search-result-item-card--infobox .search-result-item-card__image-container {
+  width: 10rem;
+  height: 10rem;
+  display: block;
+  float: left;
+  overflow: hidden;
+}
+.search-result-item-card--infobox .search-result-item-card__image-container::before {
+  display: none;
+}
+.search-result-item-card--infobox .search-result-item-card__image {
+  opacity: 0;
+  transform: translateX(-100px);
+  transition: all 0.3s;
+}
+.search-result-item-card--infobox .search-result-item-card__image--placeholder {
+  background-color: transparent;
+}
+.search-result-item-card--infobox .search-result-item-card__image--placeholder::after {
+  background-image: url('../../../../../etc.clientlibs/apartments/clientlibs/resources/logo-sun-wave-dark.gif');
+}
+.search-result-item-card--infobox .search-result-item-card__content-wrapper {
+  width: calc(100% - 100px);
+  float: left;
+  display: block;
+  margin-top: 0;
+  overflow: hidden;
+  min-height: auto;
+  padding: 0.6rem 4rem 0.7rem 1rem;
+}
+.search-result-item-card--infobox .search-result-item-card__content-container {
+  opacity: 0;
+  transform: translateX(200px);
+  transition: all 0.3s;
+}
+.search-result-item-card--infobox .search-result-item-card__cta-container {
+  right: 0.7rem;
+}
+.search-result-item-card--infobox .search-result-item-card__cta-container--bottom {
+  bottom: 0.7rem;
+}
+.search-result-item-card--infobox .search-result-item-card__content--name {
+  font-size: 1.8rem;
+  line-height: 1.8rem;
+  letter-spacing: -0.25px;
+  color: #1c2a33;
+  margin-bottom: 0.3rem;
+  margin-top: 0;
+  font-weight: 700;
+}
+.search-result-item-card--infobox .search-result-item-card__content--address {
+  font-size: 1.2rem;
+  line-height: 1.3rem;
+  color: #575759;
+  margin-bottom: 1.4rem;
+  margin-top: 0;
+}
+.search-result-item-card--infobox .search-result-item-card__content--price {
+  font-size: 1.8rem;
+  line-height: 1.8rem;
+  letter-spacing: -0.72px;
+  color: #1c2a33;
+  margin-bottom: 0.3rem;
+  margin-top: 0;
+}
+.search-result-item-card--infobox .search-result-item-card__content--beds-baths {
+  font-size: 1.4rem;
+  line-height: 1.8rem;
+  letter-spacing: -0.25px;
+  color: #575759;
+  margin-top: 0;
+  margin-bottom: 0.4rem;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 400;
+}
+@media screen and (min-width: 769px) {
+  .search-result-item-card--infobox .search-result-item-card__image-container {
+    width: 9.6rem;
+    height: 9.6rem;
+  }
+  .search-result-item-card--infobox .search-result-item-card__content-wrapper {
+    width: calc(100% - 96px);
+    padding-top: 0.6rem;
+    padding-bottom: 0;
+  }
+  .search-result-item-card--infobox .search-result-item-card__content--name {
+    font-size: 2rem;
+    line-height: 2.2rem;
+    letter-spacing: -0.25px;
+  }
+  .search-result-item-card--infobox .search-result-item-card__content--address {
+    margin-bottom: 1.4rem;
+  }
+  .search-result-item-card--infobox .search-result-item-card__content--price {
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+    letter-spacing: 0;
+    margin-bottom: 0.4rem;
+  }
+  .search-result-item-card--infobox .search-result-item-card__content--beds-baths {
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    letter-spacing: 0;
+  }
+  .search-result-item-card--infobox .search-result-item-card__cta-container--bottom {
+    right: 1.2rem;
+    bottom: 0;
+    transform: none;
+  }
+  .search-result-item-card--infobox .search-result-item-card__cta-container--top {
+    right: 1.2rem;
+    top: 0.5rem;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .search-result-item-card--infobox .search-result-item-card__content--name {
+    padding-top: 0;
+  }
+  .search-result-item-card--infobox .search-result-item-card__cta-container--bottom {
+    bottom: 1.2rem;
+  }
+  .search-result-item-card--infobox .search-result-item-card__cta-container--top {
+    top: 1.2rem;
+  }
+}
+@media screen and (max-width: 575px) {
+  .search-result-item-card--infobox .search-result-item-card__content-wrapper {
+    padding-right: 0;
+  }
+  .search-result-item-card--infobox .search-result-item-card__cta--link {
+    display: none;
+  }
+}
+@media screen and (min-width: 3300px) {
+  .search-result-item-card--infobox .search-result-item-card__content-wrapper {
+    width: calc(100% - 210px);
+  }
+}
+.search-result-item-card--show-infobox-content .search-result-item-card__image {
+  opacity: 1;
+  transform: translateX(0);
+}
+.search-result-item-card--show-infobox-content .search-result-item-card__content-container {
+  opacity: 1;
+  transform: translateX(0);
+}
+.search-result-item-card--show-infobox-content .search-result-item-card__cta {
+  opacity: 1;
+  pointer-events: initial;
+}
+@media screen and (min-width: 3300px) {
+  .search-result-item-card--show-infobox-content .search-result-item-card__content-wrapper {
+    width: calc(100% - 330px);
+  }
+}
+@media screen and (min-width: 1200px) {
+  .touch-move .search-result-item-card__cta {
+    opacity: 1;
+  }
+  .touch-move .search-result-item-card__cta--link {
+    display: none;
+  }
+  .touch-move .search-result-item-card__cta--preview {
+    display: none;
+  }
+}
+@media screen and (max-width: 1199px) {
+  .search-result-item-card__cta--preview {
+    display: none;
+  }
+}
+.community-nearby__wrapper {
+  margin-top: 2rem;
+}
+.community-nearby__card {
+  position: relative;
+}
+.community-nearby__link {
+  position: relative;
+  z-index: 5;
+}
+.community-nearby__link--hidden {
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  z-index: 4;
+  top: 0;
+  left: 0;
+}
+@media (hover: hover), (-ms-high-contrast:none) {
+  .community-nearby__link--hidden:hover + .search-result-item-card__cta-container .search-result-item-card__cta {
+    background-color: #f37120;
+    color: #ffffff;
+    border-color: #f37120;
+  }
+}
+.community-nearby .search-result-item-card {
+  margin-bottom: 7rem;
+}
+.community-nearby .search-result-item-card:last-child {
+  margin-bottom: 0;
+}
+.community-nearby .search-result-item-card__image-container {
+  height: 24.5rem;
+}
+.community-nearby .search-result-item-card__content-wrapper {
+  padding-top: 1.8rem;
+  padding-right: 2.4rem;
+  position: static;
+}
+.community-nearby .search-result-item-card__content--name {
+  font-size: 2.4rem;
+  line-height: 2.6rem;
+  letter-spacing: -0.3px;
+}
+.community-nearby .search-result-item-card__content--address {
+  margin-bottom: 1.8rem;
+}
+.community-nearby .search-result-item-card__content--price {
+  line-height: 2.6rem;
+  margin-top: 0;
+}
+.community-nearby .search-result-item-card__content--beds-baths {
+  margin-bottom: 0;
+}
+@media screen and (max-width: 575px) {
+  .community-nearby__wrapper {
+    margin-left: -2.4rem;
+    margin-right: -2.4rem;
+  }
+}
+@media screen and (min-width: 576px) {
+  .community-nearby__wrapper {
+    padding-bottom: 1.6rem;
+    margin-top: 3.6rem;
+  }
+  .community-nearby .search-result-item-card {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    margin-bottom: 4rem;
+  }
+  .community-nearby .search-result-item-card__image-container {
+    width: 20rem;
+    height: 20rem;
+  }
+  .community-nearby .search-result-item-card__image-container::before {
+    display: none;
+  }
+  .community-nearby .search-result-item-card__content-wrapper {
+    width: calc(100% - 20.6rem);
+    padding-top: 1.4rem;
+    padding-bottom: 1.2rem;
+    padding-left: 1.8rem;
+  }
+  .community-nearby .search-result-item-card__cta-container {
+    right: 3.7rem;
+    bottom: 1.2rem;
+  }
+  .community-nearby .search-result-item-card__content--name {
+    font-size: 2.4rem;
+    line-height: 2.6rem;
+    letter-spacing: -0.3px;
+  }
+  .community-nearby .search-result-item-card__content--price {
+    max-width: calc(100% - 5.4rem);
+  }
+  .community-nearby .search-result-item-card__content--beds-baths {
+    max-width: calc(100% - 5.4rem);
+  }
+  .community-nearby .search-result-item-card__content--sqft {
+    max-width: calc(100% - 5.4rem);
+  }
+}
+@media screen and (min-width: 769px) {
+  .community-nearby__wrapper {
+    padding-bottom: 2.2rem;
+    margin-top: 2.5rem;
+  }
+  .community-nearby .search-result-item-card {
+    margin-bottom: 4.8rem;
+  }
+  .community-nearby .search-result-item-card__image-container {
+    width: 19.7rem;
+    height: 19.7rem;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  .community-nearby .search-result-item-card__content-wrapper {
+    width: calc(100% - 20.3rem);
+    padding-top: 1.4rem;
+    padding-bottom: 1.8rem;
+    padding-left: 3.9rem;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  .community-nearby .search-result-item-card__cta-container {
+    right: 3.2rem;
+    bottom: 2.3rem;
+  }
+  .community-nearby .search-result-item-card__content--name {
+    font-size: 2.8rem;
+    line-height: 3rem;
+  }
+  .community-nearby .search-result-item-card__content--address {
+    line-height: 1.6rem;
+    margin-bottom: 1.6rem;
+  }
+  .community-nearby .search-result-item-card__content--price {
+    font-size: 1.8rem;
+    line-height: 2rem;
+    margin-bottom: 0.8rem;
+  }
+  .community-nearby .search-result-item-card__content--beds-baths {
+    font-size: 1.4rem;
+    line-height: 2.6rem;
+  }
+  .community-nearby .search-result-item-card__content--sqft {
+    font-size: 1.4rem;
+    line-height: 2.6rem;
+    margin-bottom: 0;
+  }
+}
+@media screen and (min-width: 992px) {
+  .community-nearby__wrapper {
+    margin-bottom: 3.5rem;
+    margin-top: 4rem;
+    padding-bottom: 0;
+    display: flex;
+    align-items: stretch;
+  }
+  .community-nearby .search-result-item-card {
+    margin-bottom: 0;
+    width: calc(50% - 1.2rem);
+  }
+  .community-nearby .search-result-item-card:nth-child(even) {
+    margin-left: 2.4rem;
+  }
+  .community-nearby .search-result-item-card__inner {
+    display: flex;
+  }
+  .community-nearby .search-result-item-card__image-container {
+    width: 20rem;
+    height: 20rem;
+  }
+  .community-nearby .search-result-item-card__content-wrapper {
+    width: calc(100% - 20.6rem);
+    padding-bottom: 1.6rem;
+    padding-left: 1.6rem;
+  }
+  .community-nearby .search-result-item-card__cta-container {
+    right: 1.6rem;
+    bottom: 1.2rem;
+  }
+  .community-nearby .search-result-item-card__content--name {
+    max-width: calc(100% - 8.8rem);
+    font-size: 2.4rem;
+    line-height: 2.6rem;
+    margin-bottom: 0.4rem;
+  }
+  .community-nearby .search-result-item-card__content--address {
+    font-size: 1.2rem;
+    line-height: 1.3rem;
+    margin-bottom: 1.8rem;
+    max-width: calc(100% - 5.4rem);
+  }
+  .community-nearby .search-result-item-card__content--price {
+    max-width: calc(100% - 5.4rem);
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+    margin-bottom: 0;
+  }
+  .community-nearby .search-result-item-card__content--beds-baths {
+    font-size: 1.2rem;
+    line-height: 2.8rem;
+  }
+  .community-nearby .search-result-item-card__content--sqft {
+    font-size: 1.2rem;
+    line-height: 1.8rem;
+    margin-bottom: 0;
+  }
+  .community-nearby .search-result-item-card__cta {
+    opacity: 1;
+  }
+}

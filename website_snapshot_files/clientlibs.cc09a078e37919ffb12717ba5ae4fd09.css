@@ -1,0 +1,12 @@
+.reset-link span {
+  margin-right: 0.4rem;
+}
+.reset-link span.apts-icon {
+  margin-right: 0;
+}
+.reset-link--reversed {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 10px;
+}

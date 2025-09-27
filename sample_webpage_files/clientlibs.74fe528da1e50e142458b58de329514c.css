@@ -1,0 +1,17 @@
+.icon-button__tooltip .v-tooltip {
+  min-width: 90px;
+  padding: 5px 10px 5px 10px;
+  box-sizing: border-box;
+  transform: translateY(100%) translateX(-54%);
+  bottom: -4px;
+  text-align: center;
+}
+.icon-button__tooltip .v-tooltip .v-tooltip__desc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #000000;
+  vertical-align: middle;
+}

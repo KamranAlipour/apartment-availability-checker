@@ -1,0 +1,1 @@
+Vue.component("no-data-found",{template:"#no-data-found-tpl",props:["showAuthoredCommunities"],methods:{linkClicked:function linkClicked($event){var path=$event.target.getAttribute("href");window.APTS.searchUtilities.changeSearchPageParams({url:path})}}});

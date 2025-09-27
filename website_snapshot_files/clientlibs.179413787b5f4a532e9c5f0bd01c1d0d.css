@@ -1,0 +1,69 @@
+.gallery-grid__box {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+.gallery-grid__item {
+  position: relative;
+  width: calc(50% - 5px);
+  margin-right: 10px;
+  margin-bottom: 10px;
+  float: left;
+}
+.gallery-grid__item:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.gallery-grid__item:nth-child(2n) {
+  margin-right: 0;
+}
+.gallery-grid__item .gallery-item {
+  width: 100%;
+  height: 0;
+  padding-bottom: 66.67%;
+  position: relative;
+}
+.gallery-grid__item .gallery-item .apartments-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.gallery-grid__item--suite .gallery-item {
+  padding-bottom: 75%;
+}
+@media screen and (min-width: 769px) {
+  .gallery-grid__item {
+    width: calc(33.33% - 6.66px);
+    margin-right: 10px;
+  }
+  .gallery-grid__item:nth-child(2n) {
+    margin-right: 10px;
+  }
+  .gallery-grid__item:nth-child(3n) {
+    margin-right: 0;
+  }
+}
+@media print {
+  .gallery-grid__item {
+    width: calc(33.33% - 6.66px);
+    margin-right: 10px;
+  }
+  .gallery-grid__item:nth-child(2n) {
+    margin-right: 10px;
+  }
+  .gallery-grid__item:nth-child(3n) {
+    margin-right: 0;
+  }
+  .gallery-grid__box {
+    display: block;
+  }
+  .gallery-grid .gallery-item {
+    border: 1px solid #f5f5f5;
+  }
+  .gallery-grid .gallery-item:hover {
+    display: none;
+  }
+}

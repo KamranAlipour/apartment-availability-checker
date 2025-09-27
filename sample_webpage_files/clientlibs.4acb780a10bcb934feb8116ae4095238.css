@@ -1,0 +1,189 @@
+.search-input {
+  position: relative;
+}
+.search-input__wrapper {
+  z-index: 2;
+  width: 100%;
+  position: relative;
+}
+.search-input__field {
+  width: 100%;
+  box-sizing: border-box;
+  height: 3rem;
+  font-size: 1.4rem;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 600;
+  padding: 0;
+  padding-right: 2rem;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #888888;
+  text-overflow: ellipsis;
+  border-radius: 0;
+}
+.search-input__field[disabled] {
+  cursor: pointer;
+  opacity: 1;
+  -webkit-text-fill-color: #888888;
+}
+.search-input__trigger {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.search-input__trigger:not(.btn-circular-with-icon) {
+  min-width: 2rem;
+  text-align: center;
+  height: 100%;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  color: #f37120;
+}
+.search-input__results {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: none;
+}
+.search-input__results--visible {
+  display: block;
+}
+.search-input .no-data {
+  padding: 0 2.4rem;
+}
+.search-input .no-data__title {
+  display: none;
+}
+@media screen and (min-width: 576px) {
+  .search-input .no-data__title {
+    display: block;
+    padding-top: 1.5rem;
+  }
+}
+.search-input .no-data__sub-title {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom-width: 0;
+}
+@media screen and (min-width: 576px) {
+  .search-input .no-data__sub-title {
+    border-bottom-width: 0.4rem;
+  }
+}
+.search-input .no-data .location {
+  padding: 0;
+}
+.search-input__dropdown__box {
+  min-width: 55rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.search-input__dropdown__body {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.search-input__dropdown__body.dropdown__body {
+  padding: 0;
+}
+@media screen and (min-width: 3300px) {
+  .search-input__dropdown__box {
+    top: 42px !important;
+  }
+  .search-input__field {
+    border-width: 3px;
+  }
+}
+.predictive-results .apts-icon {
+  padding-right: 1rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+.predictive-results__link-text {
+  display: inline-block;
+  width: calc(100% - 32px);
+  vertical-align: middle;
+}
+.predictive-results__title {
+  display: none;
+  pointer-events: none;
+}
+.predictive-results__title--uppercase {
+  text-transform: uppercase;
+}
+.predictive-results__wrapper {
+  list-style-type: none;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-left: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 3rem;
+}
+.predictive-results__item {
+  position: relative;
+}
+.predictive-results__link {
+  font-size: 1.6rem;
+  padding: 1.3rem 1.6rem;
+  line-height: 1.6rem;
+  text-decoration: none;
+  color: #000000;
+  display: block;
+  width: 100%;
+}
+@media screen and (min-width: 576px) {
+  .predictive-results__link {
+    font-size: 1.4rem;
+    padding: 1rem 0.8rem;
+  }
+}
+.predictive-results__link .apts-icon-search-lg:before {
+  color: #888888;
+}
+.predictive-results__link:hover,
+.predictive-results__link:focus {
+  text-decoration: none;
+  color: #f37120;
+  background-color: #ebebeb;
+}
+.predictive-results__link:hover .apts-icon-search-lg:before,
+.predictive-results__link:focus .apts-icon-search-lg:before {
+  color: #f37120;
+}
+.predictive-results__link--hover {
+  color: #f37120;
+  background-color: #ebebeb;
+}
+@media screen and (min-width: 576px) {
+  .predictive-results__title {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    right: 1.6rem;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    letter-spacing: 0.15rem;
+    display: block;
+    margin: 0 !important;
+    padding: 0;
+    min-width: 14rem;
+    color: #55758e;
+    pointer-events: none;
+  }
+  .predictive-results__link-text {
+    width: calc(100% - 172px);
+  }
+  .predictive-results__link {
+    font-size: 1.4rem;
+    padding: 1rem 0.8rem;
+  }
+}
+.hero-search__search .search-input__dropdown__body {
+  max-height: 30rem !important;
+}

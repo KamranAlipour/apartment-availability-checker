@@ -1,0 +1,8 @@
+.media-img__video-play:before {
+  font-size: 5.5rem;
+}
+@media screen and (min-width: 769px) {
+  .media-img__video-play:before {
+    font-size: 7.5rem;
+  }
+}

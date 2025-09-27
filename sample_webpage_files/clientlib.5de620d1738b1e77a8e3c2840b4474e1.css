@@ -1,0 +1,33 @@
+.interest-list-form__brand-input-wrapper {
+  margin-bottom: 3.8rem;
+  margin-top: 3.2rem;
+}
+.interest-list-form__btn-wrapper {
+  margin-top: 5rem;
+}
+.interest-list-form__submit-btn {
+  width: 100%;
+}
+.interest-list-form__loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.interest-list-form__confirmation-text {
+  line-height: 2.6rem;
+  font-size: 1.4rem;
+  letter-spacing: -0.03rem;
+  font-weight: 300;
+}
+.interest-list-form__close-btn .close-icon {
+  z-index: 10;
+}
+@media screen and (min-width: 992px) {
+  .interest-list-form__submit-btn {
+    margin-top: 1.2rem;
+  }
+  .interest-list-form__close-btn .close-icon {
+    right: 5.5rem;
+  }
+}
