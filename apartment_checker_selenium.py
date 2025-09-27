@@ -70,10 +70,20 @@ class ApartmentChecker:
             options.add_argument("--disable-software-rasterizer")
             options.add_argument("--disable-background-networking")
 
+            # CRITICAL: Anti-caching options to ensure fresh data on each request
+            options.add_argument("--disable-application-cache")
+            options.add_argument("--disable-offline-load-stale-cache")
+            options.add_argument("--disk-cache-size=0")
+            options.add_argument("--media-cache-size=0")
+            options.add_argument("--aggressive-cache-discard")
+            options.add_argument("--disable-background-mode")
+            options.add_argument("--disable-component-extensions-with-background-pages")
+            options.add_argument("--incognito")  # Force private browsing mode
+
             # Use a very recent Chrome user agent to appear more legitimate
             options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
 
-            # Enhanced preferences to appear more human-like
+            # Enhanced preferences to appear more human-like and force fresh data
             prefs = {
                 "credentials_enable_service": False,
                 "profile.password_manager_enabled": False,
@@ -85,6 +95,13 @@ class ApartmentChecker:
                 "profile.default_content_setting_values.plugins": 1,
                 "profile.default_content_setting_values.geolocation": 2,
                 "profile.default_content_setting_values.media_stream": 2,
+                # CRITICAL: Cache-disabling preferences to ensure fresh data
+                "profile.default_content_settings.cache": 2,  # Block cache
+                "browser.cache.disk.enable": False,
+                "browser.cache.memory.enable": False,
+                "browser.cache.offline.enable": False,
+                "http.cache.mode": 0,  # No cache
+                "network.http.use-cache": False,
             }
             options.add_experimental_option("prefs", prefs)
 
@@ -668,30 +685,46 @@ class ApartmentChecker:
 
             print(f"🏠 2-bedroom apartments found: {len(two_bedroom_apartments)}")
 
-            # If we have 2-bedroom apartments, return only those; otherwise return all
+            # If we have 2-bedroom apartments, return only those
             if two_bedroom_apartments:
                 return two_bedroom_apartments[:20]
             else:
-                print("⚠️ No 2-bedroom apartments found, returning all apartments for debugging")
-                return apartments[:20]
+                print("⚠️ No 2-bedroom apartments found in structured parsing")
 
         # Strategy 2: Look for table-based layouts
         apartments = self.parse_table_apartments(html_content)
         if apartments:
             print(f"✅ Found {len(apartments)} apartments using table parsing")
-            return apartments
+            # Apply 2-bedroom filtering
+            two_bedroom_apartments = [apt for apt in apartments if apt.get('bedrooms') == 2]
+            print(f"🏠 2-bedroom apartments found: {len(two_bedroom_apartments)}")
+            if two_bedroom_apartments:
+                return two_bedroom_apartments[:20]
 
         # Strategy 3: JSON data extraction
         apartments = self.parse_json_apartments(html_content)
         if apartments:
             print(f"✅ Found {len(apartments)} apartments using JSON parsing")
-            return apartments
+            # Apply 2-bedroom filtering
+            two_bedroom_apartments = [apt for apt in apartments if apt.get('bedrooms') == 2]
+            print(f"🏠 2-bedroom apartments found: {len(two_bedroom_apartments)}")
+            if two_bedroom_apartments:
+                return two_bedroom_apartments[:20]
 
         # Strategy 4: General price-based parsing (fallback)
         print("⚠️ No structured units found, using price-based parsing")
         apartments = self.parse_apartment_details_fallback(html_content)
 
-        return apartments
+        # Apply 2-bedroom filtering to fallback results
+        if apartments:
+            two_bedroom_apartments = [apt for apt in apartments if apt.get('bedrooms') == 2]
+            print(f"🏠 2-bedroom apartments found in fallback: {len(two_bedroom_apartments)}")
+            if two_bedroom_apartments:
+                return two_bedroom_apartments
+
+        # If no 2-bedroom apartments found anywhere, return empty list instead of 1-bedroom apartments
+        print("❌ No 2-bedroom apartments found in any parsing strategy")
+        return []
 
     def parse_structured_apartments(self, html_content):
         """Parse apartments from structured HTML containers"""
@@ -749,7 +782,7 @@ class ApartmentChecker:
                     break
 
         print(f"🎯 Total apartments found: {len(apartments)}")
-        return apartments[:20]
+        return apartments
 
     def extract_floor_plan_info(self, floor_plan_html):
         """Extract floor plan information from a floor plan container"""
@@ -1510,9 +1543,33 @@ class ApartmentChecker:
             return self.get_apartment_data_requests()
 
         try:
+            print(f"🔍 Starting fresh data retrieval at {datetime.now().strftime('%H:%M:%S')}")
+
+            # CRITICAL: Clear all caches and force fresh data retrieval
+            if hasattr(self.driver, 'execute_cdp_cmd'):
+                print("🗑️ Clearing browser cache and storage...")
+                try:
+                    # Clear cache via Chrome DevTools Protocol
+                    self.driver.execute_cdp_cmd('Network.clearBrowserCache', {})
+                    self.driver.execute_cdp_cmd('Network.clearBrowserCookies', {})
+                    self.driver.execute_cdp_cmd('Storage.clearDataForOrigin', {
+                        'origin': 'https://www.irvinecompanyapartments.com',
+                        'storageTypes': 'all'
+                    })
+                    print("✅ Browser cache and storage cleared")
+                except Exception as e:
+                    print(f"⚠️ Could not clear cache via CDP: {e}")
+
+            # Force a hard refresh by adding cache-busting parameters
+            import time
+            cache_buster = int(time.time() * 1000)  # Current timestamp in milliseconds
+
             # First try the filtered URL that should show 2-bedroom apartments directly
-            print(f"Trying filtered URL for 2-bedroom apartments: {self.filtered_url}")
-            self.driver.get(self.filtered_url)
+            filtered_url_with_cache_buster = f"{self.filtered_url}&_cb={cache_buster}&_t={cache_buster}"
+            print(f"📡 Fetching fresh data with cache buster: {cache_buster}")
+            print(f"🔗 URL: {filtered_url_with_cache_buster}")
+
+            self.driver.get(filtered_url_with_cache_buster)
 
             # Wait a bit to see if the filtered URL works
             time.sleep(5)
@@ -1525,8 +1582,10 @@ class ApartmentChecker:
                 print("✅ Filtered URL appears to be working")
             else:
                 print("⚠️ Filtered URL not working, trying main URL with manual filter...")
-                # Fallback to main URL and apply filter manually
-                self.driver.get(self.url)
+                # Fallback to main URL and apply filter manually with cache buster
+                main_url_with_cache_buster = f"{self.url}?_cb={cache_buster}&_t={cache_buster}"
+                print(f"🔗 Fallback URL: {main_url_with_cache_buster}")
+                self.driver.get(main_url_with_cache_buster)
 
             # Add random delay to appear more human-like
             import random
@@ -1714,23 +1773,98 @@ class ApartmentChecker:
         except Exception as e:
             print(f"Error saving data: {str(e)}")
 
+    def format_apartment_notification(self, apartment, total_new=1, apartment_number=1):
+        """Format a detailed notification message for a single apartment"""
+        if total_new == 1:
+            lines = ["🏠 NEW 2BR APARTMENT AVAILABLE at Monticello!"]
+        elif total_new == 2:
+            lines = [f"🏠 NEW 2BR APARTMENT #{apartment_number}/2 at Monticello!"]
+        else:
+            lines = [f"🏠 NEW 2BR APARTMENT #{apartment_number}/2 at Monticello!"]
+            if apartment_number == 1:
+                lines.append(f"📊 TOTAL: {total_new} new apartments available today!")
+                lines.append("(Showing details for first 2 units)")
+                lines.append("")
+
+        if 'unit' in apartment:
+            lines.append(f"🏷️ Unit: {apartment['unit']}")
+
+        if 'price' in apartment:
+            lines.append(f"💰 Price: {apartment['price']}/month")
+
+        if 'floor_plan' in apartment:
+            lines.append(f"📐 Floor Plan: {apartment['floor_plan']}")
+
+        if 'square_feet' in apartment:
+            lines.append(f"📏 Size: {apartment['square_feet']} sq ft")
+
+        if 'bedrooms' in apartment and 'bathrooms' in apartment:
+            lines.append(f"🛏️ Layout: {apartment['bedrooms']}BR/{apartment['bathrooms']}BA")
+
+        if 'status' in apartment:
+            lines.append(f"📋 Status: {apartment['status']}")
+
+        if 'features' in apartment and apartment['features']:
+            # Include more features for comprehensive details
+            features_to_show = apartment['features'][:5]  # Show top 5 instead of 3
+            lines.append(f"✨ Features: {', '.join(features_to_show)}")
+
+            # If there are more features, mention how many total
+            if len(apartment['features']) > 5:
+                lines.append(f"   ... and {len(apartment['features']) - 5} more features")
+
+        # Include starting price if different from current price
+        if 'starting_price' in apartment and apartment.get('starting_price') != apartment.get('price'):
+            lines.append(f"🏷️ Starting Price: {apartment['starting_price']}")
+
+        # Add a direct action line
+        lines.append("")
+        lines.append("📞 Call now to schedule a viewing!")
+        lines.append("🌐 Visit: irvinecompanyapartments.com")
+
+        return "\\n".join(lines)
+
     def send_notification(self, message):
         try:
-            # Notifications temporarily disabled - can be re-enabled later
-            print(f"🔕 Notification disabled (would have sent): {message}")
-            return
+            # Enable notifications for apartment monitoring
+            print(f"📱 Sending notification: {message}")
 
-            # Use the same notification system as the visa checker
-            cmd = f"""
-            osascript -e 'tell application "Messages"
-            send "{message}" to buddy "+13309901046" of (service 1 whose service type is iMessage)
-            end tell'
-            """
-            result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-            if result.returncode == 0:
-                print(f"✅ Notification sent: {message}")
-            else:
-                print(f"❌ Failed to send notification: {result.stderr}")
+            # Try different notification approaches
+            notification_methods = [
+                # Method 1: Direct osascript with proper escaping
+                lambda: subprocess.run([
+                    'osascript', '-e',
+                    f'tell application "Messages" to send "{message}" to buddy "+13309901046" of (service 1 whose service type is iMessage)'
+                ], capture_output=True, text=True),
+
+                # Method 2: Using shell with proper escaping
+                lambda: subprocess.run([
+                    'osascript', '-e',
+                    'tell application "Messages"',
+                    '-e', f'send "{message}" to buddy "+13309901046" of (service 1 whose service type is iMessage)',
+                    '-e', 'end tell'
+                ], capture_output=True, text=True),
+
+                # Method 3: System notification as fallback
+                lambda: subprocess.run([
+                    'osascript', '-e',
+                    f'display notification "{message[:100]}..." with title "Apartment Alert"'
+                ], capture_output=True, text=True)
+            ]
+
+            for i, method in enumerate(notification_methods, 1):
+                try:
+                    result = method()
+                    if result.returncode == 0:
+                        print(f"✅ Notification sent successfully using method {i}")
+                        return
+                    else:
+                        print(f"⚠️ Method {i} failed: {result.stderr}")
+                except Exception as e:
+                    print(f"⚠️ Method {i} error: {e}")
+
+            print("❌ All notification methods failed")
+
         except Exception as e:
             print(f"❌ Failed to send notification: {str(e)}")
 
@@ -1825,9 +1959,52 @@ class ApartmentChecker:
 
         if changes_detected:
             change_summary = "; ".join(change_details)
-            message = f"🏠 Apartment availability changed at Monticello! Changes: {change_summary}"
-            print(f"🔔 {message}")
-            self.send_notification(message)
+            base_message = f"🏠 Apartment availability changed at Monticello! Changes: {change_summary}"
+            print(f"🔔 {base_message}")
+
+            # Check if we have apartment data to work with
+            if ("apartments" in current_data and current_data["apartments"]):
+
+                # If this is the first run or previous data had errors, show current apartments as "new"
+                if (not previous_data or "error" in previous_data or
+                    "apartments" not in previous_data or not previous_data["apartments"]):
+
+                    print("📋 First successful run or recovery from error - showing current apartments")
+                    # Treat all current apartments as "new" for notification purposes
+                    new_apartments = current_data["apartments"]
+
+                else:
+                    # Find new apartments by comparing unit numbers
+                    previous_units = set()
+                    if previous_data["apartments"]:
+                        previous_units = {apt.get('unit', '') for apt in previous_data["apartments"]}
+
+                    new_apartments = []
+                    for apt in current_data["apartments"]:
+                        if apt.get('unit', '') not in previous_units:
+                            new_apartments.append(apt)
+
+                # Send detailed notifications if we have apartments to report
+                if new_apartments:
+                    total_new = len(new_apartments)
+                    # Limit to first 2 apartments to avoid spam
+                    apartments_to_notify = new_apartments[:2]
+
+                    print(f"📱 Sending detailed notifications for {len(apartments_to_notify)} apartments (total: {total_new})")
+
+                    # Send detailed message for each new apartment (max 2)
+                    for i, apt in enumerate(apartments_to_notify):
+                        detailed_message = self.format_apartment_notification(apt, total_new, i + 1)
+                        self.send_notification(detailed_message)
+                else:
+                    print("📱 No new apartments found, sending general change notification")
+                    # Send general change notification
+                    self.send_notification(base_message)
+            else:
+                print("📱 No apartment data available, sending general change notification")
+                # Send general change notification
+                self.send_notification(base_message)
+
             self.save_current_data(current_data)
         else:
             print("✅ No changes detected")
